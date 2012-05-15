@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../APS3.h"
 
 
@@ -7,7 +8,7 @@
 
 struct Image
 {
-  char * pixels;
+  unsigned char * pixels;
   unsigned int size_x;
   unsigned int size_y;
   unsigned int depth;
@@ -103,12 +104,35 @@ void ComplainAboutCalling()
 
 int EncodeFile(char * input_file,char * output_file)
 {
+
+ struct Image input_image={0};
+ ReadPPM(input_file,&input_image);
+ struct APS3Context * aps3 = APS3_Create(input_image.size_x,input_image.size_y,24);
+ APS3_AddFrame(aps3,0,0,input_image.size_x,input_image.size_y,24,input_image.pixels);
+ APS3_Write(aps3,output_file);
+ APS3_Destroy(aps3);
+ aps3=0;
+
  return 0;
 }
 
 
 int DecodeFile(char * input_file,char * output_file)
 {
+ struct APS3Context * aps3 = APS3_Create(0,0,0);
+ APS3_Read(aps3,input_file);
+
+ struct Image input_image={0};
+ input_image.size_x=aps3->width;
+ input_image.size_y=aps3->height;
+ input_image.depth=3;
+ input_image.pixels=aps3->data;
+
+ WritePPM(output_file,&input_image);
+
+ APS3_Destroy(aps3);
+ aps3=0;
+
  return 0;
 }
 
