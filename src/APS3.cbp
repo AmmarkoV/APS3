@@ -35,6 +35,10 @@
 			</Target>
 		</Build>
 		<Unit filename="APS3.h" />
+		<Unit filename="aps3_compressor.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="aps3_compressor.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
